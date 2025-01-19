@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class Product extends Base{
     private String title;
-    private String price;
+    private double price;
     private Category category;
 }
