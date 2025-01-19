@@ -22,4 +22,16 @@ public class DBService implements ProductService{
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'getLimitedProducts'");
     }
+
+    @Override
+    public Product replaceProduct(Long id, Product product) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product product) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

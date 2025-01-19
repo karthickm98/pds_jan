@@ -3,11 +3,8 @@ package com.karthick.pds_jan.controllers;
 import com.karthick.pds_jan.models.Product;
 import com.karthick.pds_jan.services.ProductService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +24,14 @@ public class ProductController {
     public List<Product> getSingleProduct(){
         return  ps.getAllProducts();
     }
-    @GetMapping("limit/{num}")
-    public List<Product> getLimitedProducts(@PathVariable("num") Integer num){
-        return  ps.getLimitedProducts(num);
+    @PutMapping("/{id}")
+    public Product replaceProduct(@PathVariable Long id, @RequestBody Product product) {
+        return ps.replaceProduct(id, product); 
     }
+    @PatchMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        return ps.updateProduct(id, product); 
+
+    }
+
 }
