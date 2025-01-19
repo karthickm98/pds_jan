@@ -48,4 +48,16 @@ public class FakeStoreService implements ProductService{
         product.setCategory(ct);
         return product;
     }
+
+    @Override
+    public List<Product> getLimitedProducts(Integer num) {
+        FakeStoreDTO[] fsDTOList =
+                restTemplate.getForObject("https://fakestoreapi.com/products?limit=" + num,
+                        FakeStoreDTO[].class);
+        List<Product> products = new ArrayList<>();
+        for (FakeStoreDTO fsdto : fsDTOList) {
+            products.add(convertFakeStoreDTOToProduct(fsdto));
+        }
+        return products;
+    }
 }

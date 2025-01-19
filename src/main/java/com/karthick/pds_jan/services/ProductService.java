@@ -7,4 +7,5 @@ import java.util.List;
 public interface ProductService {
     Product getSingleProduct(long id);
     List<Product> getAllProducts();
+    List<Product> getLimitedProducts(Integer num);
 }

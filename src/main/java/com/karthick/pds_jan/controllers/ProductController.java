@@ -27,4 +27,8 @@ public class ProductController {
     public List<Product> getSingleProduct(){
         return  ps.getAllProducts();
     }
+    @GetMapping("limit/{num}")
+    public List<Product> getLimitedProducts(@PathVariable("num") Integer num){
+        return  ps.getLimitedProducts(num);
+    }
 }

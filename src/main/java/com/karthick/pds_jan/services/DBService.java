@@ -15,4 +15,11 @@ public class DBService implements ProductService{
     public List<Product> getAllProducts() {
         return List.of();
     }
+
+    @Override
+    public List<Product> getLimitedProducts(Integer num) {
+        return null;
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'getLimitedProducts'");
+    }
 }
