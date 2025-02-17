@@ -43,18 +43,6 @@ public class FakeStoreService implements ProductService{
 
 
 
-    @Override
-    public List<Product> getLimitedProducts(Integer num) {
-        FakeStoreDTO[] fsDTOList =
-                restTemplate.getForObject("https://fakestoreapi.com/products?limit=" + num,
-                        FakeStoreDTO[].class);
-        List<Product> products = new ArrayList<>();
-        for (FakeStoreDTO fsdto : fsDTOList) {
-            products.add(convertFakeStoreDTOToProduct(fsdto));
-        }
-        return products;
-    }
-
     @Override // patch method
     public Product updateProduct(Long id, Product product) {
         // TODO create a update method patch
@@ -87,12 +75,19 @@ public class FakeStoreService implements ProductService{
 
     private Product convertFakeStoreDTOToProduct(FakeStoreDTO fsDTO) {
 
+        // Product product = new Product();
+        // product.setId(fsDTO.getId());
+        // product.setTitle(fsDTO.getTitle());
+        // product.setPrice(fsDTO.getPrice());
+        // Category ct = new Category(fsDTO.getCategory(), fsDTO.getDescription());
+        // product.setCategory(ct);
+        // return product;
         Product product = new Product();
         product.setId(fsDTO.getId());
+        product.setCategory(new Category(fsDTO.getCategory(), fsDTO.getDescription()));
         product.setTitle(fsDTO.getTitle());
         product.setPrice(fsDTO.getPrice());
-        Category ct = new Category(fsDTO.getCategory(), fsDTO.getDescription());
-        product.setCategory(ct);
+
         return product;
     }
 }

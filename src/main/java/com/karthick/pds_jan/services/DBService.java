@@ -17,13 +17,6 @@ public class DBService implements ProductService{
     }
 
     @Override
-    public List<Product> getLimitedProducts(Integer num) {
-        return null;
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'getLimitedProducts'");
-    }
-
-    @Override
     public Product replaceProduct(Long id, Product product) {
         // TODO Auto-generated method stub
         return null;
