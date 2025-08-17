@@ -14,8 +14,15 @@
     # Added jdk temuri-v-17 here
     pkgs.zulu17
     pkgs.maven
+    pkgs.mysql80
   ];
 
+  # See: https://wiki.nixos.org/wiki/Mysql
+  services.mysql = {
+    enable = true;
+    # package = pkgs.mariadb;
+    package = pkgs.mysql80; # For MySQL 8.0
+  };
   # Sets environment variables in the workspace
   env = {};
   idx = {

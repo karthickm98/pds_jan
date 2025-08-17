@@ -29,5 +29,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+### VS Code ### it's launch.json has env variables
 .vscode/
+
+## idx ## setup
+/.idx/.data

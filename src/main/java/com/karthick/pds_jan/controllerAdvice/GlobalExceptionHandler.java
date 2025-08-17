@@ -10,28 +10,26 @@ import com.karthick.pds_jan.exceptions.ProductNotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ArithmeticException.class)
-    public ResponseEntity<String> handleArithmeticException(ArithmeticException ex){
+    public ResponseEntity<String> handleArithmeticException(ArithmeticException ex) {
         ResponseEntity<String> res = new ResponseEntity<>(
-            "Arithmetic Exception Occured",
-            HttpStatus.INTERNAL_SERVER_ERROR
-        );
+                "Arithmetic Exception Occured",
+                HttpStatus.INTERNAL_SERVER_ERROR);
         return res;
     }
+
     @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
-    public ResponseEntity<String> handleArrayIndexOutOfBoundsException(ArrayIndexOutOfBoundsException ex){
+    public ResponseEntity<String> handleArrayIndexOutOfBoundsException(ArrayIndexOutOfBoundsException ex) {
         ResponseEntity<String> res = new ResponseEntity<>(
-            "Array Index Out Of Bounds Exception Occured",
-            HttpStatus.INTERNAL_SERVER_ERROR
-        );
+                "Array Index Out Of Bounds Exception Occured",
+                HttpStatus.INTERNAL_SERVER_ERROR);
         return res;
     };
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex){
+    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
         ResponseEntity<String> res = new ResponseEntity<>(
-            ex.getMessage(),
-            HttpStatus.NOT_FOUND
-        );
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND);
         return res;
     }
 }
