@@ -34,4 +34,10 @@ public class DBService implements ProductService{
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public Product createProduct(Product product) {
+        // DB implementation for createProduct goes here
+        return null;
+    }
 }

@@ -10,4 +10,5 @@ public interface ProductService {
     List<Product> getLimitedProducts(Integer num);
     Product replaceProduct(Long id, Product product);
     Product updateProduct(Long id, Product product);
+    Product createProduct(Product product);
 }
