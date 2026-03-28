@@ -20,7 +20,6 @@ public class User {
     @Id
     @GeneratedValue
     private UUID id;
-//    8aef0a0a-b06e-48d3-9532-cffb037db746
     private String name;
     @Column(name = "email_address", unique = true)
     private String email;
