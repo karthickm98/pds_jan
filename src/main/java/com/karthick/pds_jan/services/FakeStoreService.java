@@ -4,6 +4,7 @@ import com.karthick.pds_jan.dtos.FakeStoreDTO;
 import com.karthick.pds_jan.models.Category;
 import com.karthick.pds_jan.models.Product;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Qualifier("NoDatabaseService")
 public class FakeStoreService implements ProductService{
     RestTemplate restTemplate;
 
@@ -43,17 +45,17 @@ public class FakeStoreService implements ProductService{
 
 
 
-    @Override
-    public List<Product> getLimitedProducts(Integer num) {
-        FakeStoreDTO[] fsDTOList =
-                restTemplate.getForObject("https://fakestoreapi.com/products?limit=" + num,
-                        FakeStoreDTO[].class);
-        List<Product> products = new ArrayList<>();
-        for (FakeStoreDTO fsdto : fsDTOList) {
-            products.add(convertFakeStoreDTOToProduct(fsdto));
-        }
-        return products;
-    }
+//    @Override
+//    public List<Product> getLimitedProducts(Integer num) {
+//        FakeStoreDTO[] fsDTOList =
+//                restTemplate.getForObject("https://fakestoreapi.com/products?limit=" + num,
+//                        FakeStoreDTO[].class);
+//        List<Product> products = new ArrayList<>();
+//        for (FakeStoreDTO fsdto : fsDTOList) {
+//            products.add(convertFakeStoreDTOToProduct(fsdto));
+//        }
+//        return products;
+//    }
 
     @Override // patch method
     public Product updateProduct(Long id, Product product) {

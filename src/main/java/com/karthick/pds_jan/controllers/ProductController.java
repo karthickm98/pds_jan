@@ -4,6 +4,8 @@ import com.karthick.pds_jan.models.Product;
 import com.karthick.pds_jan.services.ProductService;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,9 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+    @Qualifier("DatabaseService")
     ProductService ps;
 
-    ProductController( ProductService ps){
+    ProductController(ProductService ps){
         this.ps = ps;
     }
     @GetMapping("/{id}")
