@@ -2,14 +2,17 @@ package com.karthick.pds_jan.services;
 
 import com.karthick.pds_jan.models.Product;
 import com.karthick.pds_jan.repository.RealDBProducts;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@Qualifier("DatabaseService")
+//@Service
+//@Qualifier("DatabaseService")
+@Service("DatabaseService")
 public class DBService implements ProductService {
+    @Autowired
     RealDBProducts realDBProducts;
 
     @Override

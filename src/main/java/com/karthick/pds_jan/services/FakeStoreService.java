@@ -14,8 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@Qualifier("NoDatabaseService")
+//@Service
+//@Qualifier("NoDatabaseService")
+@Service("NoDatabaseService")
 public class FakeStoreService implements ProductService{
     RestTemplate restTemplate;
 
