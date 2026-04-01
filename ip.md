@@ -97,3 +97,222 @@ If asked "What would you add next?", you can mention:
 1. **Redis Caching**: To cache product details and reduce external API calls.
 2. **Kafka Integration**: For asynchronous order processing (as mentioned in the HLD).
 3. **Security**: Implementing Spring Security with JWT for protected routes.
+
+### Diagramatic representation of models 
+
+Here are detailed Mermaid diagrams based on the project description in `ip.md` (E‑commerce + LMS backend with Spring Boot). 
+
+***
+
+## 1. Model relations (ER-style)
+
+```mermaid
+classDiagram
+    class Product {
+      Long id
+      String title
+      String description
+      Double price
+      Long categoryId
+    }
+
+    class Category {
+      Long id
+      String name
+    }
+
+    class User {
+      UUID id
+      String name
+      String email
+      String password
+      String role
+    }
+
+    class Instructor {
+      // JOINED inheritance
+      // extra fields like specialization, experience
+    }
+
+    class Learner {
+      // JOINED inheritance
+      // extra fields like enrolledDate
+    }
+
+    class Batch {
+      Long id
+      String name
+      String schedule
+      // other batch fields
+    }
+
+    Product --> Category : "ManyToOne\nMany products\none category"
+    Instructor --> Batch : "OneToMany\nOne instructor\nmany batches"
+    Instructor --|> User : "JOINED\ninheritance"
+    Learner --|> User : "JOINED\ninheritance"
+```
+
+
+***
+
+## 2. MVC flow (request → response)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client (Postman / UI)
+    participant PC as ProductController
+    participant PS as ProductService (Strategy)
+    participant FS as FakeStoreService
+    participant DBS as DBService
+    participant R as RealDBProducts (JPA Repo)
+    participant FAPI as FakeStoreAPI
+    participant DB as MySQL
+
+    C->>PC: HTTP GET /product/{id}
+    PC->>PS: getProductById(id)
+
+    alt Using external FakeStore
+        PS->>FS: getProductById(id)
+        FS->>FAPI: HTTP GET /products/{id}
+        FAPI-->>FS: FakeStoreDTO (JSON)
+        FS->>FS: map FakeStoreDTO -> Product
+        FS-->>PS: Product
+    else Using local DB
+        PS->>DBS: getProductById(id)
+        DBS->>R: findById(id)
+        R-->>DBS: Product entity
+        DBS-->>PS: Product
+    end
+
+    PS-->>PC: Product
+    PC-->>C: HTTP 200 OK + JSON
+```
+
+
+***
+
+## 3. Object flow (DTO, entities, external API)
+
+```mermaid
+flowchart LR
+    subgraph Client
+        UReq["HTTP Request<br/>JSON body / path params"]
+    end
+
+    subgraph Web_Layer
+        PCtrl["ProductController"]
+    end
+
+    subgraph Service_Layer
+        PService["ProductService interface"]
+        FService["FakeStoreService implements ProductService"]
+        DBServ["DBService implements ProductService"]
+    end
+
+    subgraph Integration_Layer
+        RT["RestTemplate"]
+        FDTO["FakeStoreDTO"]
+    end
+
+    subgraph Persistence_Layer
+        Repo["RealDBProducts repository"]
+        PEnt["Product entity"]
+        UEnt["User / Instructor / Learner"]
+        BEnt["Batch entity"]
+    end
+
+    subgraph External
+        FAPI["FakeStoreAPI"]
+    end
+
+    UReq --> PCtrl
+    PCtrl --> PService
+
+    PService --> FService
+    PService --> DBServ
+
+    FService --> RT
+    RT --> FAPI
+    FAPI --> RT
+    RT --> FDTO
+    FDTO --> FService
+    FService --> PEnt
+
+    DBServ --> Repo
+    Repo --> PEnt
+
+    PEnt --> PCtrl
+```
+
+
+***
+
+## 4. Layered architecture
+
+```mermaid
+graph TD
+    subgraph Presentation_Layer
+        A["REST Controllers<br/>ProductController, UserController"]
+    end
+
+    subgraph Application_Layer
+        B["Services<br/>ProductService, FakeStoreService, DBService, UserService"]
+    end
+
+    subgraph Domain_Layer
+        C["Entities<br/>Product, Category, User, Instructor, Learner, Batch"]
+        D["DTOs<br/>FakeStoreDTO, request models, response models"]
+    end
+
+    subgraph Infrastructure_Layer
+        E["Repositories<br/>RealDBProducts, UserRepository, InstructorRepository"]
+        F["Integration<br/>RestTemplate config, FakeStore base URL"]
+        G["Database<br/>MySQL<br/>Hibernate and JPA"]
+    end
+
+    A --> B
+    B --> C
+    B --> D
+    B --> E
+    B --> F
+    E --> G
+```
+
+
+***
+
+## 5. LMS side: user and batch flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant UC as UserController
+    participant US as UserService
+    participant UR as UserRepository
+    participant IR as InstructorRepository
+    participant DB as MySQL
+
+    C->>UC: POST /users/instructor\n(instructor JSON)
+    UC->>US: createInstructor(dto)
+    US->>US: map DTO -> Instructor (extends User)
+    US->>IR: save(instructor)
+    IR->>DB: INSERT into user, instructor tables\n(JOINED inheritance)
+    DB-->>IR: persisted Instructor
+    IR-->>US: Instructor
+    US-->>UC: Instructor response
+    UC-->>C: HTTP 201 + JSON
+
+    C->>UC: GET /users/instructor/{name}
+    UC->>US: findInstructorByName(name)
+    US->>IR: findByName(name)
+    IR->>DB: SELECT with JOIN on user + instructor
+    DB-->>IR: List<Instructor> with batches (via SUBSELECT)
+    IR-->>US: List<Instructor>
+    US-->>UC: List<Instructor>
+    UC-->>C: HTTP 200 + JSON
+```
+
+
+***
